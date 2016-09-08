@@ -18,6 +18,7 @@ public:
 private slots:
     void addContact();
     void showContactInfo(const QModelIndex &index);
+    void openFile();
 
 private:
     Ui::MainWindow *ui;

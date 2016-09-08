@@ -82,9 +82,9 @@ bool PhoneBookModel::insertRows(int row, int count, const QModelIndex &/*parent*
 //    qDebug() << row << " " << count;
 
     beginInsertRows(QModelIndex(), row, row+count-1);
-    contacts.insert(contacts.begin()+row, Contact("Imie", "Nazwisko", "email", "1234", true));
+    contacts.insert(contacts.begin()+row,Contact());
     endInsertRows();
-
+//    qDebug()<<"Row inserted, new size - "<<contacts.size();
     return true;
 }
 
@@ -94,6 +94,43 @@ bool PhoneBookModel::removeRows(int row, int count, const QModelIndex &/*parent*
     contacts.erase(contacts.begin()+row, contacts.begin()+count);
     endRemoveRows();
 
+    return true;
+}
+
+bool PhoneBookModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+//    qDebug()<<"setData "<<index;
+    if(!index.isValid() || role != Qt::EditRole)
+        return false;
+
+    int row = index.row();
+
+    Contact tmp_cont = std::move(contacts.at(row));
+
+
+    switch (index.column()) {
+    case Columns::Name:
+        tmp_cont.name = value.toString();
+        break;
+    case Columns::Lastname:
+        tmp_cont.lastname = value.toString();
+        break;
+    case Columns::Email:
+        tmp_cont.email = value.toString();
+        break;
+    case Columns::Number:
+        tmp_cont.number = value.toString();
+        break;
+    case Columns::IsMale:
+        tmp_cont.isMale = (value.toString() == "Male");
+        break;
+    default:
+        return false;
+    }
+
+    contacts.replace(row, tmp_cont);
+//    qDebug()<<contacts.size();
+    emit dataChanged(index,index);
     return true;
 }
 
