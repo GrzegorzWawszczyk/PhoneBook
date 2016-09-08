@@ -1,9 +1,14 @@
 #include "phonebookmodel.h"
 
+#include <QDebug>
+
 PhoneBookModel::PhoneBookModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-
+    contacts.append(Contact("Jan", "Kowalski", "jk@abc.com", "1234", true));
+    contacts.append(Contact("Piotr", "Nowak", "pn@abc.com", "9876", true));
+    contacts.append(Contact("Janina", "Kowalska", "jka@abc.com", "4321", false));
+    contacts.append(Contact("Stefan", "Polak", "sp@abc.com", "6789", true));
 }
 
 int PhoneBookModel::rowCount(const QModelIndex& /*parent*/) const
@@ -18,6 +23,8 @@ int PhoneBookModel::columnCount(const QModelIndex& /*parent*/) const
 
 QVariant PhoneBookModel::data(const QModelIndex &index, int role) const
 {
+    //qDebug() <<index <<" "<< role;
+
     if(!index.isValid() || index.row() >= contacts.size() || role != Qt::DisplayRole)
     {
         return QVariant();
