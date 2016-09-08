@@ -17,6 +17,7 @@ public:
 
 private slots:
     void addContact();
+    void showContactInfo(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;

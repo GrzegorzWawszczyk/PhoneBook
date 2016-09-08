@@ -25,7 +25,7 @@ QVariant PhoneBookModel::data(const QModelIndex &index, int role) const
 {
     //qDebug() <<index <<" "<< role;
 
-    if(!index.isValid() || index.row() >= contacts.size() || role != Qt::DisplayRole)
+    if(!index.isValid() || index.row() >= contacts.size() || role != Qt::DisplayRole )
     {
         return QVariant();
     }
