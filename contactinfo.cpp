@@ -15,6 +15,7 @@ ContactInfo::ContactInfo(QString name, QString lastname, QString email, QString 
 {
     ui->setupUi(this);
     connect(ui->b_ok, &QPushButton::clicked, this, &QWidget::close);
+    this->setWindowTitle(QString(name+" "+lastname+"'s detailed data"));
     ui->name_text->setText(name);
     ui->lastname_text->setText(lastname);
     ui->email_text->setText(email);

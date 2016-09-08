@@ -91,7 +91,7 @@ bool PhoneBookModel::insertRows(int row, int count, const QModelIndex &/*parent*
 bool PhoneBookModel::removeRows(int row, int count, const QModelIndex &/*parent*/)
 {
     beginRemoveRows(QModelIndex(), row, row+count-1);
-    contacts.erase(contacts.begin()+row, contacts.begin()+count);
+    contacts.erase(contacts.begin()+row, contacts.begin()+row+count);
     endRemoveRows();
 
     return true;

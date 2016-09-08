@@ -17,8 +17,11 @@ public:
 
 private slots:
     void addContact();
+    void removeContacts();
     void showContactInfo(const QModelIndex &index);
     void openFile();
+    void saveFile();
+    void removeAll();
 
 private:
     Ui::MainWindow *ui;
