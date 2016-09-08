@@ -5,10 +5,10 @@
 PhoneBookModel::PhoneBookModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    contacts.append(Contact("Jan", "Kowalski", "jk@abc.com", "1234", true));
-    contacts.append(Contact("Piotr", "Nowak", "pn@abc.com", "9876", true));
-    contacts.append(Contact("Janina", "Kowalska", "jka@abc.com", "4321", false));
-    contacts.append(Contact("Stefan", "Polak", "sp@abc.com", "6789", true));
+//    contacts.append(Contact("Jan", "Kowalski", "jk@abc.com", "1234", true));
+//    contacts.append(Contact("Piotr", "Nowak", "pn@abc.com", "9876", true));
+//    contacts.append(Contact("Janina", "Kowalska", "jka@abc.com", "4321", false));
+//    contacts.append(Contact("Stefan", "Polak", "sp@abc.com", "6789", true));
 }
 
 int PhoneBookModel::rowCount(const QModelIndex& /*parent*/) const
@@ -122,7 +122,7 @@ bool PhoneBookModel::setData(const QModelIndex &index, const QVariant &value, in
         tmp_cont.number = value.toString();
         break;
     case Columns::IsMale:
-        tmp_cont.isMale = (value.toString() == "Male");
+        tmp_cont.isMale = value.toBool();
         break;
     default:
         return false;

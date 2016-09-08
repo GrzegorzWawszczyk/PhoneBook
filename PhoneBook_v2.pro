@@ -15,11 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     phonebookmodel.cpp \
-    contactinfo.cpp
+    contactinfo.cpp \
+    addcontact.cpp
 
 HEADERS  += mainwindow.h \
     phonebookmodel.h \
-    contactinfo.h
+    contactinfo.h \
+    addcontact.h
 
 FORMS    += mainwindow.ui \
-    contactinfo.ui
+    contactinfo.ui \
+    addcontact.ui

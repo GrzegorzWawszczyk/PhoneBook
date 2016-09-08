@@ -1,3 +1,4 @@
+#include "addcontact.h"
 #include "contactinfo.h"
 #include "mainwindow.h"
 #include "phonebookmodel.h"
@@ -20,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lv_contacts->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->lv_contacts->setSelectionMode(QAbstractItemView::ContiguousSelection);
 
+    if(ui->lv_contacts->model()->rowCount()==0)
+        openFile();
+
     connect(ui->b_add, &QPushButton::clicked, this, &MainWindow::addContact);
     connect(ui->b_remove, &QPushButton::clicked, this, &MainWindow::removeContacts);
     connect(ui->lv_contacts, QListView::doubleClicked, this, MainWindow::showContactInfo);
@@ -35,7 +39,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::addContact()
 {
-    ui->lv_contacts->model()->insertRows(0,1);
+    PhoneBookModel *pbm = dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model());
+    AddContact *ac = new AddContact(0,pbm);
+    ac->setAttribute(Qt::WA_DeleteOnClose);
+    ac->show();
 }
 
 void MainWindow::removeContacts()
@@ -47,9 +54,7 @@ void MainWindow::removeContacts()
         return;
     }
 
-    qDebug()<<rows.first().row()<<" "<<rows.size();
     std::sort(rows.begin(), rows.end());
-    qDebug()<<rows.first().row()<<" "<<rows.size();
     ui->lv_contacts->model()->removeRows(rows.first().row(), rows.size());
 }
 
@@ -83,7 +88,7 @@ void MainWindow::openFile()
             QString lastname = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Lastname);
             QString email = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Email);
             QString number = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Number);
-            QString isMale = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::IsMale);
+            bool isMale = (str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::IsMale) == "Male");
 
 //            qDebug()<<name<<" "<<lastname<<" "<<email<<" "<<number<<" "<<isMale;
 
