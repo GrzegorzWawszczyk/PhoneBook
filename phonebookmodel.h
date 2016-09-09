@@ -31,11 +31,13 @@ public:
         Email,
         Number,
         IsMale,
+        Fullname,
         Count
     };
 
 
     PhoneBookModel(QObject *parent);
+    ~PhoneBookModel();
 
     int rowCount(const QModelIndex& parent = {}) const override;
     int columnCount(const QModelIndex& parent = {}) const override;

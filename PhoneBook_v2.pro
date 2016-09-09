@@ -16,13 +16,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     phonebookmodel.cpp \
     contactinfo.cpp \
-    addcontact.cpp
+    addcontact.cpp \
+    editwindow.cpp
 
 HEADERS  += mainwindow.h \
     phonebookmodel.h \
     contactinfo.h \
-    addcontact.h
+    addcontact.h \
+    editwindow.h
 
 FORMS    += mainwindow.ui \
     contactinfo.ui \
-    addcontact.ui
+    addcontact.ui \
+    editwindow.ui

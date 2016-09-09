@@ -1,5 +1,6 @@
 #include "addcontact.h"
 #include "contactinfo.h"
+#include "editwindow.h"
 #include "mainwindow.h"
 #include "phonebookmodel.h"
 #include "ui_mainwindow.h"
@@ -7,6 +8,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileDialog>
+#include <cstddef>
 
 const char UNIT_SEPARATOR = static_cast<char>(31);
 
@@ -18,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     PhoneBookModel* pbm = new PhoneBookModel(this);
     ui->lv_contacts->setModel(pbm);
+    ui->lv_contacts->setModelColumn(PhoneBookModel::Columns::Fullname);
     ui->lv_contacts->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->lv_contacts->setSelectionMode(QAbstractItemView::ContiguousSelection);
 
@@ -30,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->a_open, &QAction::triggered, this, &MainWindow::openFile);
     connect(ui->a_save, &QAction::triggered, this, &MainWindow::saveFile);
     connect(ui->a_removeAll, &QAction::triggered, this, &MainWindow::removeAll);
+    connect(ui->a_edit, &QAction::triggered, this, &MainWindow::editContacts);
 }
 
 MainWindow::~MainWindow()
@@ -136,4 +140,11 @@ void MainWindow::saveFile()
 void MainWindow::removeAll()
 {
     ui->lv_contacts->model()->removeRows(0,ui->lv_contacts->model()->rowCount());
+}
+
+void MainWindow::editContacts()
+{
+    EditWindow *ew = new EditWindow(nullptr,dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model()));
+    ew->setAttribute(Qt::WA_DeleteOnClose);
+    ew->show();
 }

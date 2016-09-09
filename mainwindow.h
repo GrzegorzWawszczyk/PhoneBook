@@ -22,6 +22,7 @@ private slots:
     void openFile();
     void saveFile();
     void removeAll();
+    void editContacts();
 
 private:
     Ui::MainWindow *ui;

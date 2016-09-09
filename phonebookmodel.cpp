@@ -9,6 +9,12 @@ PhoneBookModel::PhoneBookModel(QObject *parent)
 //    contacts.append(Contact("Piotr", "Nowak", "pn@abc.com", "9876", true));
 //    contacts.append(Contact("Janina", "Kowalska", "jka@abc.com", "4321", false));
 //    contacts.append(Contact("Stefan", "Polak", "sp@abc.com", "6789", true));
+
+}
+
+PhoneBookModel::~PhoneBookModel()
+{
+
 }
 
 int PhoneBookModel::rowCount(const QModelIndex& /*parent*/) const
@@ -33,6 +39,9 @@ QVariant PhoneBookModel::data(const QModelIndex &index, int role) const
     const PhoneBookModel::Contact& contact = contacts[index.row()];
     switch(index.column())
     {
+    case Columns::Fullname:
+        return contact.name+" "+contact.lastname;
+
     case Columns::Name:
         return contact.name;
 
