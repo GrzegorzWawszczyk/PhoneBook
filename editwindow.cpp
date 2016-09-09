@@ -14,7 +14,7 @@ EditWindow::EditWindow(QWidget *parent, PhoneBookModel *pbm) :
     header->setSectionResizeMode(PhoneBookModel::Columns::Email,QHeaderView::Stretch);
     header->setSectionResizeMode(PhoneBookModel::Columns::Number,QHeaderView::Stretch);
     header->setSectionResizeMode(PhoneBookModel::Columns::IsMale,QHeaderView::Stretch);
-    header->setSectionHidden(PhoneBookModel::Columns::Fullname, true);
+    header->setSectionHidden(PhoneBookModel::Columns::Fullname, false);
 
     connect(ui->b_cancel, &QPushButton::clicked, this, &QWidget::close);
     connect(ui->b_confirm, &QPushButton::clicked, this, &QWidget::close);
