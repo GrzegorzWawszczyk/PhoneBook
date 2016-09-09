@@ -14,21 +14,18 @@ AddContact::AddContact(QWidget *parent, PhoneBookModel *pbm) :
     connect(ui->b_cancel, &QPushButton::clicked, this, &QWidget::close);
     connect(ui->b_add, &QPushButton::clicked, this, [this, pbm]()
     {
-        qDebug()<<pbm->rowCount();
-        if(ui->le_name->text().isEmpty() || ui->le_number->text().isEmpty() || ui->le_email->text().isEmpty() || ui->le_lastname->text().isEmpty())
+//        qDebug()<<pbm->rowCount();
+        if (ui->le_name->text().isEmpty() || ui->le_number->text().isEmpty() || ui->le_email->text().isEmpty() || ui->le_lastname->text().isEmpty())
         {
             QMessageBox::warning(this, "Empty contact details", "You must enter contact details");
         }
         else{
-//            emit add(ui->le_name->text(), ui->le_number->text());
-            qDebug()<<pbm->rowCount();
-            int row = pbm->rowCount();
-            pbm->insertRows(row,1);
-            pbm->setData(pbm->index(row,PhoneBookModel::Columns::Name), QVariant(ui->le_name->text()));
-            pbm->setData(pbm->index(row,PhoneBookModel::Columns::Lastname), QVariant(ui->le_lastname->text()));
-            pbm->setData(pbm->index(row,PhoneBookModel::Columns::Email), QVariant(ui->le_email->text()));
-            pbm->setData(pbm->index(row,PhoneBookModel::Columns::Number), QVariant(ui->le_number->text()));
-            pbm->setData(pbm->index(row,PhoneBookModel::Columns::IsMale), QVariant(ui->rb_male->isChecked()));
+            QString name = std::move(ui->le_name->text());
+            QString lastname = std::move(ui->le_lastname->text());
+            QString email = std::move(ui->le_email->text());
+            QString number = std::move(ui->le_number->text());
+            bool isMale = std::move(ui->rb_male->isChecked());
+            pbm->addContact(name, lastname, email, number, isMale);
             this->close();
         }
     });

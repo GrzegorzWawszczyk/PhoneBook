@@ -47,6 +47,8 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
+    void addContact(QString name, QString lastname, QString email, QString number, bool isMale);
+
 private:
     QVector<Contact> contacts;
 };

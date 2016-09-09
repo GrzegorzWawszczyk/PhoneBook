@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lv_contacts->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->lv_contacts->setSelectionMode(QAbstractItemView::ContiguousSelection);
 
-    if(ui->lv_contacts->model()->rowCount()==0)
+    if (ui->lv_contacts->model()->rowCount()==0)
         openFile();
 
     connect(ui->b_add, &QPushButton::clicked, this, &MainWindow::addContact);
@@ -44,7 +44,7 @@ MainWindow::~MainWindow()
 void MainWindow::addContact()
 {
     PhoneBookModel *pbm = dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model());
-    AddContact *ac = new AddContact(0,pbm);
+    AddContact *ac = new AddContact(nullptr, pbm);
     ac->setAttribute(Qt::WA_DeleteOnClose);
     ac->show();
 }
@@ -53,7 +53,7 @@ void MainWindow::removeContacts()
 {
     auto rows = ui->lv_contacts->selectionModel()->selectedRows(0);
 
-    if(rows.isEmpty())
+    if (rows.isEmpty())
     {
         return;
     }
@@ -64,11 +64,16 @@ void MainWindow::removeContacts()
 
 void MainWindow::showContactInfo(const QModelIndex &index)
 {
-    QString name = ui->lv_contacts->model()->data(index.sibling(index.row(),PhoneBookModel::Columns::Name)).toString();
-    QString lastname = ui->lv_contacts->model()->data(index.sibling(index.row(),PhoneBookModel::Columns::Lastname)).toString();
-    QString email = ui->lv_contacts->model()->data(index.sibling(index.row(),PhoneBookModel::Columns::Email)).toString();
-    QString number = ui->lv_contacts->model()->data(index.sibling(index.row(),PhoneBookModel::Columns::Number)).toString();
-    QString sexString = ui->lv_contacts->model()->data(index.sibling(index.row(),PhoneBookModel::Columns::IsMale)).toString();
+    auto columnString = [&](int column)
+    {
+        return ui->lv_contacts->model()->data(index.sibling(index.row(), column)).toString();
+    };
+
+    QString name = columnString(PhoneBookModel::Columns::Name);
+    QString lastname = columnString(PhoneBookModel::Columns::Lastname);
+    QString email = columnString(PhoneBookModel::Columns::Email);
+    QString number = columnString(PhoneBookModel::Columns::Number);
+    QString sexString = columnString(PhoneBookModel::Columns::IsMale);
     ContactInfo* ci = new ContactInfo(name, lastname, email, number, sexString);
     ci->setAttribute(Qt::WA_DeleteOnClose);
     ci->show();
@@ -80,36 +85,33 @@ void MainWindow::openFile()
     QString filename = QFileDialog::getOpenFileName(this);
 
     QFile file(filename);
-    if(file.open(QIODevice::ReadOnly)){
-//        this->removeAll();
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return;
+    }
+        this->removeAll();
         QTextStream in(&file);
 
         QString fileData  = in.readAll();
         QStringList contactList = fileData.split("\n", QString::SkipEmptyParts);
-        for(QString str : contactList)
+
+        for (QString str : contactList)
         {
-            QString name = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Name);
-            QString lastname = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Lastname);
+            auto columnString = [&](int column)
+            {
+                return str.split(UNIT_SEPARATOR).at(column);
+            };
+            QString name = columnString(PhoneBookModel::Columns::Name);
+            QString lastname = columnString(PhoneBookModel::Columns::Lastname);
             QString email = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Email);
             QString number = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Number);
             bool isMale = (str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::IsMale) == "Male");
 
-//            qDebug()<<name<<" "<<lastname<<" "<<email<<" "<<number<<" "<<isMale;
-
-            auto model = ui->lv_contacts->model();
-            int row = model->rowCount();
-            model->insertRows(row,1); // inserting one row
-            model->setData(model->index(row,PhoneBookModel::Columns::Name), name);
-            model->setData(model->index(row,PhoneBookModel::Columns::Lastname), lastname);
-            model->setData(model->index(row,PhoneBookModel::Columns::Email), email);
-            model->setData(model->index(row,PhoneBookModel::Columns::Number), number);
-            model->setData(model->index(row,PhoneBookModel::Columns::IsMale), isMale);
-
-
-//            ui->list_contacts->addItem(str.split(UNIT_SEPARATOR).at(0));
+            PhoneBookModel* model = dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model());
+            model->addContact(name, lastname, email, number, isMale);
         }
         file.close();
-    }
+
 }
 
 void MainWindow::saveFile()
@@ -117,21 +119,24 @@ void MainWindow::saveFile()
     QString filename = QFileDialog::getSaveFileName(this);
 
     QFile file(filename);
-    if(file.open(QIODevice::WriteOnly)){
-//        this->removeAll();
+    if (file.open(QIODevice::WriteOnly)){
         QTextStream out(&file);
 
         auto model = ui->lv_contacts->model();
 
-        for(int row = 0; row < model->rowCount(); row++)
+        for (int row = 0; row < model->rowCount(); row++)
         {
-            QString name = model->data(model->index(row, PhoneBookModel::Columns::Name)).toString();
-            QString lastname = model->data(model->index(row, PhoneBookModel::Columns::Lastname)).toString();
-            QString email = model->data(model->index(row, PhoneBookModel::Columns::Email)).toString();
-            QString number = model->data(model->index(row, PhoneBookModel::Columns::Number)).toString();
-            QString isMale = model->data(model->index(row, PhoneBookModel::Columns::IsMale)).toString();
+            auto columnString = [&](int column)
+            {
+                return model->data(model->index(row, column)).toString();
+            };
+            QString name = columnString(PhoneBookModel::Columns::Name);
+            QString lastname = columnString(PhoneBookModel::Columns::Lastname);
+            QString email = columnString(PhoneBookModel::Columns::Email);
+            QString number = columnString(PhoneBookModel::Columns::Number);
+            QString isMale = columnString(PhoneBookModel::Columns::IsMale);
 
-            out<< name << UNIT_SEPARATOR << lastname << UNIT_SEPARATOR << email << UNIT_SEPARATOR << number << UNIT_SEPARATOR << isMale << "\n";
+            out << name << UNIT_SEPARATOR << lastname << UNIT_SEPARATOR << email << UNIT_SEPARATOR << number << UNIT_SEPARATOR << isMale << "\n";
         }
         file.close();
     }
@@ -139,12 +144,13 @@ void MainWindow::saveFile()
 
 void MainWindow::removeAll()
 {
-    ui->lv_contacts->model()->removeRows(0,ui->lv_contacts->model()->rowCount());
+    if (ui->lv_contacts->model()->rowCount()>0)
+        ui->lv_contacts->model()->removeRows(0, ui->lv_contacts->model()->rowCount());
 }
 
 void MainWindow::editContacts()
 {
-    EditWindow *ew = new EditWindow(nullptr,dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model()));
+    EditWindow *ew = new EditWindow(nullptr, dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model()));
     ew->setAttribute(Qt::WA_DeleteOnClose);
     ew->show();
 }

@@ -16,13 +16,13 @@ ContactInfo::ContactInfo(QString name, QString lastname, QString email, QString 
     ui->setupUi(this);
     connect(ui->b_ok, &QPushButton::clicked, this, &QWidget::close);
     this->setWindowTitle(QString(name+" "+lastname+"'s detailed data"));
-    ui->name_text->setText(name);
-    ui->lastname_text->setText(lastname);
-    ui->email_text->setText(email);
-    ui->s_text->setText(sexString);
-    ui->number_text->setText(number);
+    ui->name_text->setText(std::move(name));
+    ui->lastname_text->setText(std::move(lastname));
+    ui->email_text->setText(std::move(email));
+    ui->s_text->setText(std::move(sexString));
+    ui->number_text->setText(std::move(number));
     QPixmap pix("./person-placeholder.jpg");
-    ui->l_picture->setPixmap(pix.scaled(250,250,Qt::KeepAspectRatio));
+    ui->l_picture->setPixmap(pix.scaled(250 ,250, Qt::KeepAspectRatio));
 }
 
 ContactInfo::~ContactInfo()

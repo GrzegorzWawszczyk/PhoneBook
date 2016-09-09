@@ -31,16 +31,16 @@ QVariant PhoneBookModel::data(const QModelIndex &index, int role) const
 {
     //qDebug() <<index <<" "<< role;
 
-    if(!index.isValid() || index.row() >= contacts.size() || role != Qt::DisplayRole )
+    if (!index.isValid() || index.row() >= contacts.size() || role != Qt::DisplayRole )
     {
         return QVariant();
     }
 
     const PhoneBookModel::Contact& contact = contacts[index.row()];
-    switch(index.column())
+    switch (index.column())
     {
     case Columns::Fullname:
-        return contact.name+" "+contact.lastname;
+        return contact.name + " " + contact.lastname;
 
     case Columns::Name:
         return contact.name;
@@ -55,7 +55,7 @@ QVariant PhoneBookModel::data(const QModelIndex &index, int role) const
         return contact.number;
 
     case Columns::IsMale:
-        if(contact.isMale)
+        if (contact.isMale)
             return "Male";
        else
             return "Female";
@@ -67,7 +67,7 @@ QVariant PhoneBookModel::data(const QModelIndex &index, int role) const
 
 QVariant PhoneBookModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
         switch (section) {
         case Columns::Name:
@@ -91,7 +91,7 @@ bool PhoneBookModel::insertRows(int row, int count, const QModelIndex &/*parent*
 //    qDebug() << row << " " << count;
 
     beginInsertRows(QModelIndex(), row, row+count-1);
-    contacts.insert(contacts.begin()+row,Contact());
+    contacts.insert(contacts.begin() + row, Contact());
     endInsertRows();
 //    qDebug()<<"Row inserted, new size - "<<contacts.size();
     return true;
@@ -99,8 +99,8 @@ bool PhoneBookModel::insertRows(int row, int count, const QModelIndex &/*parent*
 
 bool PhoneBookModel::removeRows(int row, int count, const QModelIndex &/*parent*/)
 {
-    beginRemoveRows(QModelIndex(), row, row+count-1);
-    contacts.erase(contacts.begin()+row, contacts.begin()+row+count);
+    beginRemoveRows(QModelIndex(), row, row + count-1);
+    contacts.erase(contacts.begin() + row, contacts.begin()+row+count);
     endRemoveRows();
 
     return true;
@@ -109,7 +109,7 @@ bool PhoneBookModel::removeRows(int row, int count, const QModelIndex &/*parent*
 bool PhoneBookModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 //    qDebug()<<"setData "<<index;
-    if(!index.isValid() || role != Qt::EditRole)
+    if (!index.isValid() || role != Qt::EditRole)
         return false;
 
     int row = index.row();
@@ -139,8 +139,15 @@ bool PhoneBookModel::setData(const QModelIndex &index, const QVariant &value, in
 
     contacts.replace(row, tmp_cont);
 //    qDebug()<<contacts.size();
-    emit dataChanged(index,index);
+    emit dataChanged(index ,index);
     return true;
+}
+
+void PhoneBookModel::addContact(QString name, QString lastname, QString email, QString number, bool isMale)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    contacts.insert(contacts.begin() + rowCount(), Contact(std::move(name), std::move(lastname), std::move(email), std::move(number), std::move(isMale)));
+    endInsertRows();
 }
 
 PhoneBookModel::Contact::Contact(QString name, QString lastname, QString email, QString number, bool isMale)
