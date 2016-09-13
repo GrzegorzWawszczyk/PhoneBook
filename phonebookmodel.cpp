@@ -20,6 +20,7 @@ PhoneBookModel::~PhoneBookModel()
 int PhoneBookModel::rowCount(const QModelIndex& /*parent*/) const
 {
     return contacts.size();
+
 }
 
 int PhoneBookModel::columnCount(const QModelIndex& /*parent*/) const
@@ -143,11 +144,37 @@ bool PhoneBookModel::setData(const QModelIndex &index, const QVariant &value, in
     return true;
 }
 
+Qt::ItemFlags PhoneBookModel::flags(const QModelIndex &index) const
+{
+    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+}
+
+void PhoneBookModel::swap(QVector<Contact> newContacts)
+{
+    QVector<Contact> tmpVector = contacts;
+    contacts.swap(newContacts);
+    for (Contact contact : tmpVector)
+    {
+        contacts.append(std::move(contact));
+    }
+}
+
+void PhoneBookModel::changeData()
+{
+    emit dataChanged(this->index(0,0), this->index(this->rowCount()-1, Columns::Count));
+}
+
 void PhoneBookModel::addContact(QString name, QString lastname, QString email, QString number, bool isMale)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     contacts.insert(contacts.begin() + rowCount(), Contact(std::move(name), std::move(lastname), std::move(email), std::move(number), std::move(isMale)));
     endInsertRows();
+}
+
+void PhoneBookModel::removeAll()
+{
+    if (rowCount()>0)
+        removeRows(0, rowCount());
 }
 
 PhoneBookModel::Contact::Contact(QString name, QString lastname, QString email, QString number, bool isMale)

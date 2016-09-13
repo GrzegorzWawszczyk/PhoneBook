@@ -36,7 +36,7 @@ public:
     };
 
 
-    PhoneBookModel(QObject *parent);
+    PhoneBookModel(QObject *parent = 0);
     ~PhoneBookModel();
 
     int rowCount(const QModelIndex& parent = {}) const override;
@@ -46,8 +46,14 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+    void swap(QVector<Contact> newContacts);
     void addContact(QString name, QString lastname, QString email, QString number, bool isMale);
+    void removeAll();
+
+public slots:
+    void changeData();
 
 private:
     QVector<Contact> contacts;

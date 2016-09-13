@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,13 +18,15 @@ SOURCES += main.cpp\
     phonebookmodel.cpp \
     contactinfo.cpp \
     addcontact.cpp \
-    editwindow.cpp
+    editwindow.cpp \
+    filehandler.cpp
 
 HEADERS  += mainwindow.h \
     phonebookmodel.h \
     contactinfo.h \
     addcontact.h \
-    editwindow.h
+    editwindow.h \
+    filehandler.h
 
 FORMS    += mainwindow.ui \
     contactinfo.ui \
