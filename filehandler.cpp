@@ -42,11 +42,9 @@ void FileHandler::readFile(QString filename, QVector<PhoneBookModel::Contact> *v
                 vector->append(PhoneBookModel::Contact(name, lastname, email, number, isMale));
             }
 
-
-            file.close();
 }
 
-void FileHandler::saveFile(QString filename, QVector<PhoneBookModel::Contact> const* vector)
+void FileHandler::saveFile(QString filename, const QVector<PhoneBookModel::Contact> &vector)
 {
 
     QFile file(filename);
@@ -58,12 +56,10 @@ void FileHandler::saveFile(QString filename, QVector<PhoneBookModel::Contact> co
 
         QTextStream out(&file);
 
-        for (PhoneBookModel::Contact contact :  *vector)
+        for (const PhoneBookModel::Contact& contact : vector)
         {
             out << contact.name << UNIT_SEPARATOR << contact.lastname << UNIT_SEPARATOR << contact.email << UNIT_SEPARATOR
                 << contact.number << UNIT_SEPARATOR << (contact.isMale ? "Male" : "Female") << "\n";
         }
 
-
-        file.close();
 }

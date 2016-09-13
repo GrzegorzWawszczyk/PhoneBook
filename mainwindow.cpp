@@ -111,29 +111,6 @@ void MainWindow::saveFile()
 
     FileHandler *fh = new FileHandler();
     fh->saveFile(filename, dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model())->getAll());
-
-   /* QFile file(filename);
-    if (file.open(QIODevice::WriteOnly)){
-        QTextStream out(&file);
-
-        auto model = ui->lv_contacts->model();
-
-        for (int row = 0; row < model->rowCount(); row++)
-        {
-            auto columnString = [&](int column)
-            {
-                return model->data(model->index(row, column)).toString();
-            };
-            QString name = columnString(PhoneBookModel::Columns::Name);
-            QString lastname = columnString(PhoneBookModel::Columns::Lastname);
-            QString email = columnString(PhoneBookModel::Columns::Email);
-            QString number = columnString(PhoneBookModel::Columns::Number);
-            QString isMale = columnString(PhoneBookModel::Columns::IsMale);
-
-            out << name << UNIT_SEPARATOR << lastname << UNIT_SEPARATOR << email << UNIT_SEPARATOR << number << UNIT_SEPARATOR << isMale << "\n";
-        }
-        file.close();
-    }*/
 }
 
 void MainWindow::removeAll()

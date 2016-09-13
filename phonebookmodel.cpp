@@ -149,6 +149,11 @@ Qt::ItemFlags PhoneBookModel::flags(const QModelIndex &index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
 }
 
+/**
+ * Swaps vector of contacts.
+ * @brief PhoneBookModel::swap
+ * @param newContacts Vector of contacts to swap with
+ */
 void PhoneBookModel::swap(QVector<Contact> newContacts)
 {
     QVector<Contact> tmpVector = contacts;
@@ -171,9 +176,9 @@ void PhoneBookModel::addContact(QString name, QString lastname, QString email, Q
     endInsertRows();
 }
 
-QVector<PhoneBookModel::Contact> *PhoneBookModel::getAll()
+QVector<PhoneBookModel::Contact>& PhoneBookModel::getAll()
 {
-    return &contacts;
+    return contacts;
 }
 
 void PhoneBookModel::removeAll()

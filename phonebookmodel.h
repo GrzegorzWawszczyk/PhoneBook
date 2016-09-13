@@ -51,7 +51,7 @@ public:
     void swap(QVector<Contact> newContacts);
     void changeData();
     void addContact(QString name, QString lastname, QString email, QString number, bool isMale);
-    QVector<Contact>* getAll();
+    QVector<Contact> &getAll();
     void removeAll();
 
 public slots:
