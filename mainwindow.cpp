@@ -103,44 +103,16 @@ void MainWindow::openFile()
 
         watcher->setFuture(loadFuture);
 
-
-    //FileHandler::readFile(filename, dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model()));
-
-    /*QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        return;
-    }
-        this->removeAll();
-        QTextStream in(&file);
-
-        QString fileData  = in.readAll();
-        QStringList contactList = fileData.split("\n", QString::SkipEmptyParts);
-
-        for (QString str : contactList)
-        {
-            auto columnString = [&](int column)
-            {
-                return str.split(UNIT_SEPARATOR).at(column);
-            };
-            QString name = columnString(PhoneBookModel::Columns::Name);
-            QString lastname = columnString(PhoneBookModel::Columns::Lastname);
-            QString email = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Email);
-            QString number = str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::Number);
-            bool isMale = (str.split(UNIT_SEPARATOR).at(PhoneBookModel::Columns::IsMale) == "Male");
-
-            PhoneBookModel* model = dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model());
-            model->addContact(name, lastname, email, number, isMale);
-        }
-        file.close();*/
-
 }
 
 void MainWindow::saveFile()
 {
     QString filename = QFileDialog::getSaveFileName(this);
 
-    QFile file(filename);
+    FileHandler *fh = new FileHandler();
+    fh->saveFile(filename, dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model())->getAll());
+
+   /* QFile file(filename);
     if (file.open(QIODevice::WriteOnly)){
         QTextStream out(&file);
 
@@ -161,7 +133,7 @@ void MainWindow::saveFile()
             out << name << UNIT_SEPARATOR << lastname << UNIT_SEPARATOR << email << UNIT_SEPARATOR << number << UNIT_SEPARATOR << isMale << "\n";
         }
         file.close();
-    }
+    }*/
 }
 
 void MainWindow::removeAll()

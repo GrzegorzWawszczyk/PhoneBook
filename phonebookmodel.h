@@ -49,11 +49,12 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     void swap(QVector<Contact> newContacts);
+    void changeData();
     void addContact(QString name, QString lastname, QString email, QString number, bool isMale);
+    QVector<Contact>* getAll();
     void removeAll();
 
 public slots:
-    void changeData();
 
 private:
     QVector<Contact> contacts;

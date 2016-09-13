@@ -45,3 +45,25 @@ void FileHandler::readFile(QString filename, QVector<PhoneBookModel::Contact> *v
 
             file.close();
 }
+
+void FileHandler::saveFile(QString filename, QVector<PhoneBookModel::Contact> const* vector)
+{
+
+    QFile file(filename);
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            return;
+        }
+
+
+        QTextStream out(&file);
+
+        for (PhoneBookModel::Contact contact :  *vector)
+        {
+            out << contact.name << UNIT_SEPARATOR << contact.lastname << UNIT_SEPARATOR << contact.email << UNIT_SEPARATOR
+                << contact.number << UNIT_SEPARATOR << (contact.isMale ? "Male" : "Female") << "\n";
+        }
+
+
+        file.close();
+}

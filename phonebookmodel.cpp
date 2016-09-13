@@ -171,6 +171,11 @@ void PhoneBookModel::addContact(QString name, QString lastname, QString email, Q
     endInsertRows();
 }
 
+QVector<PhoneBookModel::Contact> *PhoneBookModel::getAll()
+{
+    return &contacts;
+}
+
 void PhoneBookModel::removeAll()
 {
     if (rowCount()>0)

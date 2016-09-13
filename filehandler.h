@@ -11,9 +11,8 @@ class FileHandler : public QObject
 public:
     explicit FileHandler(QObject *parent = 0);
     void readFile(QString filename, QVector<PhoneBookModel::Contact> *vector);
+    void saveFile(QString filename, const QVector<PhoneBookModel::Contact> *vector);
 
-signals:
-    fileRead();
 
 public slots:
 };
