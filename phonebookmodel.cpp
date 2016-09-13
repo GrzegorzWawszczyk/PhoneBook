@@ -176,7 +176,7 @@ void PhoneBookModel::addContact(QString name, QString lastname, QString email, Q
     endInsertRows();
 }
 
-QVector<PhoneBookModel::Contact>& PhoneBookModel::getAll()
+const QVector<PhoneBookModel::Contact>& PhoneBookModel::getAll()
 {
     return contacts;
 }

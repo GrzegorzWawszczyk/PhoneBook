@@ -92,7 +92,7 @@ void MainWindow::openFile()
         removeAll();
 
         QVector<PhoneBookModel::Contact> *vector = new QVector<PhoneBookModel::Contact>();
-        QFuture<void> loadFuture = QtConcurrent::run(new FileHandler(), &FileHandler::readFile, filename, vector/*dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model())*/);
+        QFuture<void> loadFuture = QtConcurrent::run(new FileHandler(), &FileHandler::readFile, filename, vector);
         QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
         connect(watcher, &QFutureWatcher<void>::finished, [this, vector]()
         {
@@ -108,9 +108,9 @@ void MainWindow::openFile()
 void MainWindow::saveFile()
 {
     QString filename = QFileDialog::getSaveFileName(this);
+    QtConcurrent::run(new FileHandler(), &FileHandler::saveFile, filename, dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model())->getAll());
 
-    FileHandler *fh = new FileHandler();
-    fh->saveFile(filename, dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model())->getAll());
+    //fh.saveFile(filename, dynamic_cast<PhoneBookModel*>(ui->lv_contacts->model())->getAll());
 }
 
 void MainWindow::removeAll()
